@@ -188,10 +188,31 @@ var powerOfTwo = function(n) {
 
 // 9. Write a function that reverses a string.
 var reverse = function(string) {
+
+  if (string.length === 1) {
+    return string[0];
+  }
+
+  var lastInd = string.length - 1;
+  var lastEle = string[lastInd];
+  return lastEle + reverse(string.slice(0, lastInd));
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string) {
+  // base
+  if (string.length < 2) {
+    return true;
+  }
+  var firstEle = string[0].toLowerCase();
+  var lastEle = string[string.length - 1].toLowerCase();
+  if (firstEle !== lastEle) {
+    return false;
+  } else {
+    return palindrome(string.slice(1, -1));
+  }
+
+  // still needs space ignoral
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
