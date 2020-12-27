@@ -52,18 +52,16 @@ var arraySum = function(array, total) {
   var total = 0;
 
 
-  var innerSum = function(array) {
-    for (var i = 0; i < array.length; i++) {
-      var ele = array[i];
 
-      if (!Array.isArray(ele)) {
-        total += ele;
-      } else {
-        innerSum(ele);
-      }
+  for (var i = 0; i < array.length; i++) {
+    var ele = array[i];
+
+    if (!Array.isArray(ele)) {
+      total += ele;
+    } else {
+      total += arraySum(ele);
     }
   }
-  innerSum(array);
 
   return total;
 };
@@ -221,6 +219,30 @@ var palindrome = function(string) {
 // modulo(17,5) // 2
 // modulo(22,6) // 4
 var modulo = function(x, y) {
+  if (y === 0) {
+    return NaN;
+  }
+  if (x < 0) {
+    x = -x;
+    if (y < 0) {
+      y = -y
+      if (x < y) {
+        return -x;
+      } else {
+        return -(modulo(x - y, y));
+      }
+    }
+    if (x < y) {
+      return -x;
+    } else {
+      return -(modulo(x - y, y));
+    }
+  }
+  if (x < y) {
+    return x;
+  } else {
+    return modulo(x - y, y);
+  }
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator or
