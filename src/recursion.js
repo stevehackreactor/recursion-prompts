@@ -395,11 +395,25 @@ var fizzBuzz = function(n) {
 // countOccurrence([2,7,4,4,1,4], 4) // 3
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
 var countOccurrence = function(array, value) {
+  if (array.length === 0) {
+    return 0;
+  }
+  var count = 0;
+  if (array[0] === value) {
+    count += 1;
+  }
+
+  return count + countOccurrence(array.slice(1), value);
 };
 
 // 21. Write a recursive version of map.
 // rMap([1,2,3], timesTwo); // [2,4,6]
 var rMap = function(array, callback) {
+  if (array.length === 0) {
+    return [];
+  }
+  var mapped = callback(array[0]);
+  return [mapped].concat(rMap(array.slice(1), callback));
 };
 
 // 22. Write a function that counts the number of times a key occurs in an object.
@@ -464,6 +478,18 @@ var replaceKeysInObj = function(obj, oldKey, newKey) {
 // fibonacci(5); // [0,1,1,2,3,5]
 // Note: The 0 is not counted.
 var fibonacci = function(n) {
+  if (n <= 0) {
+    return null;
+  }
+  if (n === 2) {
+    return 1;
+  }
+  if (n === 1) {
+    return 1;
+  }
+  var fib = fibonacci(n - 1) + fibonacci(n - 2);
+  // var prevFib = fibonacci(n - 1);
+  return
 };
 
 // 26. Return the Fibonacci number located at index n of the Fibonacci sequence.
@@ -472,17 +498,44 @@ var fibonacci = function(n) {
 // nthFibo(7); // 13
 // nthFibo(3); // 2
 var nthFibo = function(n) {
+  if (n < 0) {
+    return null;
+  }
+  if (n === 0) {
+    return 0;
+  }
+  if (n === 1) {
+    return 1;
+  }
+
+  return nthFibo(n - 1) + nthFibo(n - 2);
 };
 
 // 27. Given an array of words, return a new array containing each word capitalized.
 // var words = ['i', 'am', 'learning', 'recursion'];
 // capitalizedWords(words); // ['I', 'AM', 'LEARNING', 'RECURSION']
 var capitalizeWords = function(array) {
+  var capLet = [array[0].toUpperCase()];
+
+  if (array.length === 1) {
+    return capLet;
+  }
+
+  return capLet.concat(capitalizeWords(array.slice(1)));
 };
 
 // 28. Given an array of strings, capitalize the first letter of each index.
 // capitalizeFirst(['car','poop','banana']); // ['Car','Poop','Banana']
 var capitalizeFirst = function(array) {
+  var capLet = array[0][0].toUpperCase();
+  var cappedWord = [capLet + array[0].slice(1)];
+
+  if (array.length === 1) {
+    return cappedWord;
+  }
+
+  return cappedWord.concat(capitalizeFirst(array.slice(1)));
+
 };
 
 // 29. Return the sum of all even numbers in an object containing nested objects.
@@ -495,11 +548,48 @@ var capitalizeFirst = function(array) {
 // };
 // nestedEvenSum(obj1); // 10
 var nestedEvenSum = function(obj) {
+  var total = 0;
+
+  for (var key in obj) {
+    if (typeof obj[key] === "object") {
+      total += nestedEvenSum(obj[key]);
+    }
+    if (obj[key] % 2 === 0) {
+      total += obj[key];
+    }
+  }
+
+  return total;
 };
 
 // 30. Flatten an array containing nested arrays.
 // flatten([1,[2],[3,[[4]]],5]); // [1,2,3,4,5]
 var flatten = function(array) {
+  var returnArr = [];
+
+  array.forEach(function(item) {
+    if (!Array.isArray(item)) {
+      console.log(item);
+      returnArr.push(item);
+    } else {
+      returnArr = returnArr.concat(flatten(item));
+    }
+  })
+  // console.log('===============');
+  return returnArr;
+
+  // var returnArr = [];
+
+  // for (var i = 0; i < array.length; i++) {
+  //   var ele = array[i];
+  //   if (Array.isArray(ele)) {
+  //     returnArr.concat(flatten(ele));
+  //   } else {
+  //     returnArr.push(ele);
+  //   }
+  // }
+
+  // return returnArr;
 };
 
 // 31. Given a string, return an object containing tallies of each letter.
