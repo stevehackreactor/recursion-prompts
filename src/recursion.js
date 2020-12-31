@@ -295,6 +295,21 @@ var divide = function(x, y) {
 // http://www.cse.wustl.edu/~kjg/cse131/Notes/Recursion/recursion.html
 // https://www.khanacademy.org/computing/computer-science/cryptography/modarithmetic/a/the-euclidean-algorithm
 var gcd = function(x, y) {
+  if (x < 0 || y < 0) {
+    return null;
+  }
+  if (x === 0) {
+    return y;
+  }
+  if (y === 0) {
+    return x;
+  }
+  if (x > y) {
+    return gcd(y, x % y);
+  }
+  if (x < y) {
+    return gcd(x, y % x);
+  }
 };
 
 // 15. Write a function that compares each character of two strings and returns true if
@@ -341,6 +356,10 @@ var reverseArr = function(array) {
 // buildList(0,5) // [0,0,0,0,0]
 // buildList(7,3) // [7,7,7]
 var buildList = function(value, length) {
+  if (length === 1) {
+    return [value];
+  }
+  return [value].concat(buildList(value, length - 1));
 };
 
 // 19. Implement FizzBuzz. Given integer n, return an array of the string representations of 1 to n.
@@ -349,6 +368,27 @@ var buildList = function(value, length) {
 // For numbers which are multiples of both three and five, output “FizzBuzz” instead of the number.
 // fizzBuzz(5) // ['1','2','Fizz','4','Buzz']
 var fizzBuzz = function(n) {
+  if (n === 1) {
+    return ['1'];
+  }
+  if (n % 3 === 0 && n % 5 === 0) {
+    var newArr = ['FizzBuzz'];
+    var nextArr = fizzBuzz(n - 1);
+    return nextArr.concat(newArr);
+  }
+  if (n % 3 === 0 && !(n % 5 === 0)) {
+    var newArr = ['Fizz'];
+    var nextArr = fizzBuzz(n - 1);
+    return nextArr.concat(newArr);
+  }
+  if (!(n % 3 === 0) && n % 5 === 0) {
+    var newArr = ['Buzz'];
+    var nextArr = fizzBuzz(n - 1);
+    return nextArr.concat(newArr);
+  }
+  var newArr = [n.toString()];
+  var nextArr = fizzBuzz(n - 1);
+  return nextArr.concat(newArr);
 };
 
 // 20. Count the occurence of a value in a list.
