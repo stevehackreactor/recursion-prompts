@@ -478,18 +478,24 @@ var replaceKeysInObj = function(obj, oldKey, newKey) {
 // fibonacci(5); // [0,1,1,2,3,5]
 // Note: The 0 is not counted.
 var fibonacci = function(n) {
-  if (n <= 0) {
+  if (n < 1) {
     return null;
   }
-  if (n === 2) {
-    return 1;
-  }
   if (n === 1) {
-    return 1;
+    return [0, 1];
   }
-  var fib = fibonacci(n - 1) + fibonacci(n - 2);
-  // var prevFib = fibonacci(n - 1);
-  return
+  if (n === 2) {
+    return [0, 1, 1];
+  }
+  var prev1Term = fibonacci(n - 1);
+  console.log('term 1: ' + prev1Term);
+  var prev2Term = fibonacci(n - 2);
+  console.log('term 2: ' + prev2Term);
+  var thisTerm = prev1Term[prev1Term.length - 1] + prev2Term[prev2Term.length - 1];
+  console.log('this term: ' + thisTerm);
+  var result = prev1Term.concat([thisTerm]);
+  console.log('result is ' + result)
+  return result;
 };
 
 // 26. Return the Fibonacci number located at index n of the Fibonacci sequence.
@@ -595,6 +601,19 @@ var flatten = function(array) {
 // 31. Given a string, return an object containing tallies of each letter.
 // letterTally('potato'); // {p:1, o:2, t:2, a:1}
 var letterTally = function(str, obj) {
+  obj = obj || {};
+  if (str.length === 0) {
+    return obj;
+  }
+
+  var firstLet = str[0];
+  if (obj[firstLet] !== undefined) {
+    obj[firstLet] ++;
+  } else {
+    obj[firstLet] = 1;
+  }
+
+ return letterTally(str.slice(1), obj);
 };
 
 // 32. Eliminate consecutive duplicates in a list. If the list contains repeated
@@ -603,18 +622,54 @@ var letterTally = function(str, obj) {
 // compress([1,2,2,3,4,4,5,5,5]) // [1,2,3,4,5]
 // compress([1,2,2,3,4,4,2,5,5,5,4,4]) // [1,2,3,4,2,5,4]
 var compress = function(list) {
+  var arr = [];
+  if (list.length === 1) {
+    return list;
+  }
+
+  if (list[0] === list[1]) {
+    return compress(list.slice(1));
+  } else {
+    arr.push(list[0]);
+  }
+
+  return arr.concat(compress(list.slice(1)));
 };
 
 // 33. Augment every element in a list with a new value where each element is an array
 // itself.
 // augmentElements([[],[3],[7]], 5); // [[5],[3,5],[7,5]]
 var augmentElements = function(array, aug) {
+  var arr = [];
+
+  var newEle = array[0];
+  newEle.push(aug);
+  arr.push(newEle);
+
+
+  if (array.length === 1) {
+    return arr;
+  }
+
+  return arr.concat(augmentElements(array.slice(1), aug));
 };
 
 // 34. Reduce a series of zeroes to a single 0.
 // minimizeZeroes([2,0,0,0,1,4]) // [2,0,1,4]
 // minimizeZeroes([2,0,0,0,1,0,0,4]) // [2,0,1,0,4]
 var minimizeZeroes = function(array) {
+  var arr = [];
+  if (array.length === 1) {
+    return array;
+  }
+
+  if (array[0] === array[1] && array[0] === 0) {
+    return minimizeZeroes(array.slice(1));
+  } else {
+    arr.push(array[0]);
+  }
+
+  return arr.concat(minimizeZeroes(array.slice(1)));
 };
 
 // 35. Alternate the numbers in an array between positive and negative regardless of
@@ -622,12 +677,58 @@ var minimizeZeroes = function(array) {
 // alternateSign([2,7,8,3,1,4]) // [2,-7,8,-3,1,-4]
 // alternateSign([-2,-7,8,3,-1,4]) // [2,-7,8,-3,1,-4]
 var alternateSign = function(array) {
+  var returnArr = [];
+  var positivefy = function(num) {
+    if (num < 0) {
+      return -num;
+    }
+    return num;
+  }
+  var firstEle = positivefy(array[0]);
+  var secondEle = -(positivefy(array[1]));
+
+  if (array.length < 3) {
+    returnArr.push(firstEle);
+    if (secondEle !== undefined || secondEle !== -undefined) {
+      returnArr.push(secondEle);
+    }
+
+    return returnArr;
+  }
+
+  returnArr.push(firstEle, secondEle);
+
+  return returnArr.concat(alternateSign(array.slice(2)));
 };
 
 // 36. Given a string, return a string with digits converted to their word equivalent.
 // Assume all numbers are single digits (less than 10).
 // numToText("I have 5 dogs and 6 ponies"); // "I have five dogs and six ponies"
 var numToText = function(str) {
+  var numStrings = {
+    1: "one",
+    2: "two",
+    3: "three",
+    4: "four",
+    5: "five",
+    6: "six",
+    7: "seven",
+    8: "eight",
+    9: "nine",
+    0: "zero"
+  };
+  var returnStr = '';
+  var currentEle = str[0];
+  if (str.length === 0) {
+    return returnStr;
+  }
+  if (numStrings[currentEle] !== undefined) {
+    returnStr += numStrings[currentEle];
+  } else {
+    returnStr += currentEle;
+  }
+
+  return returnStr + numToText(str.slice(1));
 };
 
 
@@ -642,6 +743,29 @@ var tagCount = function(tag, node) {
 // binarySearch(array, 5) // 5
 // https://www.khanacademy.org/computing/computer-science/algorithms/binary-search/a/binary-search
 var binarySearch = function(array, target, min, max) {
+  var min = min || 0;
+  if (max === undefined) {
+    var max = array.length - 1;
+  }
+
+  var guess = Math.floor((min + max) / 2);
+
+  if (array[guess] === target) {
+    return guess;
+  }
+  console.log(guess, min, max, target, array);
+  if (max < min) {
+    return null;
+  }
+
+  if (array[guess] > target) {
+    console.log("reducing max");
+    return binarySearch(array, target, min, guess - 1);
+  }
+  if (array[guess] < target) {
+    console.log("increasing min");
+    return binarySearch(array, target, guess + 1, max);
+  }
 };
 
 // 39. Write a merge sort function.
