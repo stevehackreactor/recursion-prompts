@@ -771,7 +771,74 @@ var binarySearch = function(array, target, min, max) {
 // 39. Write a merge sort function.
 // mergeSort([34,7,23,32,5,62]) // [5,7,23,32,34,62]
 // https://www.khanacademy.org/computing/computer-science/algorithms/merge-sort/a/divide-and-conquer-algorithms
-var mergeSort = function(array) {
+var mergeSort = function(array) { // returns a sorted array
+  // split the array in half
+  console.log('New context with array: ' + array);
+
+  var lowerHalf = []; // clone for the bottom half of the array we look at
+  var upperHalf = []; // clone for the upper half of the array we look at
+  var p = 0; // starting point in the array we look at
+  var r = array.length - 1; // ending point in the array we look at
+  var q = Math.floor((p + r) / 2); // midpoint in the array we look at
+
+
+  var i = 0;
+  var j = 0;
+  var k = 0;
+  while (k <= q) {
+    lowerHalf[i] = array[k];
+    i++;
+    k++;
+  }
+  while (k <= r) {
+    upperHalf[j] = array[k];
+    j++;
+    k++;
+  }
+  i = 0; // reset counters
+  j = 0;
+  k = 0;
+
+  // define the merge function which takes in two sorted arrays and returns a sorted array of their contents
+  var merge = function(array1, array2) {
+    console.log('merging arrays: ' + array1 + ' and ' + array2);
+    var mergedArr = [];
+    var i = 0; // array1 counter
+    var j = 0; // array2 counter
+    var k = 0; // mergedArr counter
+    while (i < array1.length && j < array2.length) {
+      if (array1[i] < array2[j]) {
+        mergedArr[k] = array1[i];
+        k++;
+        i++;
+      } else {
+        mergedArr[k] = array2[j];
+        k++;
+        j++;
+      }
+    }
+    while (i < array1.length) {
+      mergedArr[k] = array1[i];
+      k++;
+      i++;
+    }
+    while (j < array2.length) {
+      mergedArr[k] = array2[j];
+      k++;
+      j++;
+    }
+    return mergedArr;
+  }
+
+  // if there are more than one ele in the array, run mergeSort again
+  if (lowerHalf.length > 1 || upperHalf.length > 1) {
+    console.log('splitting the arrays: ' + lowerHalf + ' and ' + upperHalf);
+    return merge(mergeSort(lowerHalf), mergeSort(upperHalf));
+  } else {
+    // if there is one ele in the array
+    return merge(lowerHalf, upperHalf);
+  }
+  // return a sorted array
 };
 
 // 40. Deeply clone objects and arrays.
