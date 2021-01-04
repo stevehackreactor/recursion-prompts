@@ -736,6 +736,7 @@ var numToText = function(str) {
 
 // 37. Return the number of times a tag occurs in the DOM.
 var tagCount = function(tag, node) {
+
 };
 
 // 38. Write a function for binary search.
@@ -847,4 +848,39 @@ var mergeSort = function(array) { // returns a sorted array
 // console.log(obj2); // {a:1,b:{bb:{bbb:2}},c:3}
 // obj1 === obj2 // false
 var clone = function(input) {
+  // declare a return obj/arr
+  var output = input.constructor();
+  // foreach statement to iterate through the eles of the input oj
+  if (input === null || typeof input !== "object") {
+    return input;
+  }
+  for (var key in input) {
+    output[key] = clone(input[key]);
+  }
+  // return the return obj/arr
+  return output;
 };
+
+// if (Array.isArray(input)) {
+//   input.forEach(function(ele) {
+//     if (Array.isArray(ele)) {
+//       output.push(clone(ele));
+//     } else {
+//       var temp = ele;
+//       output.push(temp);
+//     }
+//   })
+// } else {
+//   for (var key in input) {
+//     // if that ele is an object
+//     if (typeof input[key] === "object") {
+//       // add/push the return value of clone(ele) to the return obj/arr
+//       output[key] = clone(input[key]);
+//     } else {
+//       // if that ele is not an object
+//       // simply add/push that ele to the return obj/arr
+//       var temp = input[key];
+//       output[key] = temp;
+//     }
+//   }
+// }
