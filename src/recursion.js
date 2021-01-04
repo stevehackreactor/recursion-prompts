@@ -736,8 +736,32 @@ var numToText = function(str) {
 
 // 37. Return the number of times a tag occurs in the DOM.
 var tagCount = function(tag, node) {
+  console.log('new execution context');
+  var node = node || document.body;
+  // declare tag count at 0 initially
+  var tagTotal = 0;
+  // iterate through the initial node
+  node.childNodes.forEach(function(child) {
+    // if the current ele is of the specified tag, add one to the tag count
+    console.log(tagTotal);
+    console.log(child.localName, tag);
+    if (child.localName === tag) {
+      tagTotal ++;
+    }
+    // if the current ele has children
+    if (child.childNodes !== undefined) {
+      // add the tagCount from its children (through recursive call) to the current total
+      console.log('starting to recurse with tag: ' + tag + ' child: ' + child);
+      tagTotal += tagCount(tag, child);
+    }
+  })
 
+
+  // return tag count;
+  return tagTotal;
 };
+
+// nodeName: tag
 
 // 38. Write a function for binary search.
 // var array = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15];
